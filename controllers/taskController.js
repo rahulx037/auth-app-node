@@ -48,20 +48,8 @@ exports.singleTask = async (req, res) => {
 };
 
 exports.createTask = async (req, res) => {
-	const { title, description } = req.body;
-	const { userId } = req.user;
+	const { title, description , userId } = req.body;
 	try {
-		const { error, value } = createTaskSchema.validate({
-			title,
-			description,
-			userId,
-		});
-		if (error) {
-			return res
-				.status(401)
-				.json({ success: false, message: error.details[0].message });
-		}
-
 		const result = await Task.create({
 			title,
 			description,
@@ -75,19 +63,10 @@ exports.createTask = async (req, res) => {
 
 exports.updateTask = async (req, res) => {
 	const { _id } = req.query;
-	const { title, description } = req.body;
-	const { userId } = req.user;
+	const { title, description ,userId } = req.body;
+
 	try {
-		const { error, value } = createTaskSchema.validate({
-			title,
-			description,
-			userId,
-		});
-		if (error) {
-			return res
-				.status(401)
-				.json({ success: false, message: error.details[0].message });
-		}
+	
 		const existingTask = await Task.findOne({ _id });
 		if (!existingTask) {
 			return res
@@ -110,7 +89,7 @@ exports.updateTask = async (req, res) => {
 exports.deleteTask = async (req, res) => {
 	const { _id } = req.query;
 
-	const { userId } = req.user;
+	const { userId } = req.body;
 	try {
 		const existingTask = await Task.findOne({ _id });
 		if (!existingTask) {

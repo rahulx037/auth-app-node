@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 // Connect to MongoDB database
-mongoose.connect(process.env.MONGODB ?? "mongodb://localhost:27017/short-url")
+mongoose.connect(process.env.MONGODB ?? "mongodb://localhost:3000/short-url")
 .then(() => {
   console.log('Connected to MongoDB');
 })

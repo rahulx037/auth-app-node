@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const User = require('../models/usersModel');
 const { doHash, doHashValidation, hmacProcess } = require('../utils/hashing');
 
@@ -6,7 +7,8 @@ exports.signup = async (req, res) => {
       // Check if the email already exists
       const existingUser = await User.findOne({ email: req.body.email });
       if (existingUser) {
-        return res.status(400).json({ error: 'Email already exists' });
+        return res.status(401)
+				.json({ success: false, message: 'User already exists!' });
       }
   
       // Hash the password
@@ -29,7 +31,7 @@ exports.signup = async (req, res) => {
   exports.signin = async (req, res) => {
       try {
         // Check if the email exists
-        const user = await User.findOne({ email: req.body.email }).select('+password');
+        const user = await User.findOne({ email: req.body.email });
         if (!user) {
           return res.status(401).json({ error: 'Invalid credentials' });
         }
@@ -47,6 +49,7 @@ exports.signup = async (req, res) => {
 			}).json({
 				success: true,
 				token,
+        userId:user._id,
 				message: 'logged in successfully',
 			});
         //res.status(200).json({ token });

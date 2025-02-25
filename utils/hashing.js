@@ -3,13 +3,13 @@ const { hash, compare } = require('bcryptjs');
 
 exports.doHash = (value, saltValue) => {
 	const result = hash(value, saltValue);
-    console.log(`Password hash: ${result.value}`);
+    console.log(`Password hash: ${result}`);
 	return result;
 };
 
 exports.doHashValidation = (value, hashedValue) => {
 	const result = compare(value, hashedValue);
-    console.log(`Password matched: ${result.value}`);
+    console.log(`Password matched: ${Boolean(result)}`);
 	return result;
 };
 
