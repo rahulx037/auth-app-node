@@ -1,4 +1,5 @@
 const Task = require('../models/taskModel');
+const { createTaskSchema } = require('../middlewares/validator');
 
 exports.getTasks = async (req, res) => {
 	const { page } = req.query;

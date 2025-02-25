@@ -1,4 +1,5 @@
 const User = require('../models/usersModel');
+const { doHash, doHashValidation, hmacProcess } = require('../utils/hashing');
 
 exports.signup = async (req, res) => {
     try {
@@ -9,7 +10,7 @@ exports.signup = async (req, res) => {
       }
   
       // Hash the password
-      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      const hashedPassword = await doHash(req.body.password, 12);
   
       // Create a new user
       const newUser = new User({
@@ -28,20 +29,27 @@ exports.signup = async (req, res) => {
   exports.signin = async (req, res) => {
       try {
         // Check if the email exists
-        const user = await User.findOne({ email: req.body.email });
+        const user = await User.findOne({ email: req.body.email }).select('+password');
         if (!user) {
           return res.status(401).json({ error: 'Invalid credentials' });
         }
     
         // Compare passwords
-        const passwordMatch = await bcrypt.compare(req.body.password, user.password);
+        const passwordMatch = await doHashValidation(req.body.password, user.password);
         if (!passwordMatch) {
           return res.status(401).json({ error: 'Invalid credentials' });
         }
     
         // Generate JWT token
         const token = jwt.sign({ email: user.email }, 'secret');
-        res.status(200).json({ token });
+        res.cookie('Authorization', 'Bearer ' + token, {
+				expires: new Date(Date.now() + 8 * 3600000)
+			}).json({
+				success: true,
+				token,
+				message: 'logged in successfully',
+			});
+        //res.status(200).json({ token });
       } catch (error) {
         res.status(500).json({ error: 'Internal server error' });
       }
