@@ -7,7 +7,7 @@ const cors = require('cors');
 
 // Creating an Express application instance
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -121,7 +121,7 @@ const userSchema = new mongoose.Schema({
   });
   
   // Start the server
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
   });
 
