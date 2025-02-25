@@ -10,7 +10,7 @@ exports.signup = async (req, res) => {
       }
   
       // Hash the password
-      const hashedPassword = await doHash(req.body.password, 12);
+      const hashedPassword = await doHash(req.body.password, 10);
   
       // Create a new user
       const newUser = new User({
