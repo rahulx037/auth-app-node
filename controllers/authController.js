@@ -22,9 +22,9 @@ exports.signup = async (req, res) => {
       });
       
       await newUser.save();
-      res.status(201).json({ message: 'User registered successfully' });
+      res.status(201).json({success: true,message: 'User registered successfully' });
     } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({success: false, message: 'Internal server error' });
     }
   };
 
@@ -33,13 +33,13 @@ exports.signup = async (req, res) => {
         // Check if the email exists
         const user = await User.findOne({ email: req.body.email });
         if (!user) {
-          return res.status(401).json({ error: 'Invalid credentials' });
+          return res.status(401).json({ success: false,message: 'Invalid credentials' });
         }
     
         // Compare passwords
         const passwordMatch = await doHashValidation(req.body.password, user.password);
         if (!passwordMatch) {
-          return res.status(401).json({ error: 'Invalid credentials' });
+          return res.status(401).json({ success: false,message: 'Invalid credentials' });
         }
     
         // Generate JWT token
@@ -54,7 +54,7 @@ exports.signup = async (req, res) => {
 			});
         //res.status(200).json({ token });
       } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ success: false,message: 'Internal server error' });
       }
     };
 
@@ -63,11 +63,11 @@ exports.signup = async (req, res) => {
           // Fetch user details using decoded token
           const user = await User.findOne({ email: req.user.email });
           if (!user) {
-            return res.status(404).json({ error: 'User not found' });
+            return res.status(404).json({ success: false,message: 'User not found' });
           }
-          res.status(200).json({ username: user.username, email: user.email });
+          res.status(200).json({ success: true,username: user.username, email: user.email,message: 'User fetched successfully' });
         } catch (error) {
-          res.status(500).json({ error: 'Internal server error' });
+          res.status(500).json({ success: false,message: 'Internal server error' });
         }
       };
 

@@ -44,6 +44,7 @@ exports.singleTask = async (req, res) => {
 			.json({ success: true, message: 'single task', data: existingTask });
 	} catch (error) {
 		console.log(error);
+		res.status(500).json({ success: false,message: 'Internal server error' });
 	}
 };
 
@@ -58,6 +59,7 @@ exports.createTask = async (req, res) => {
 		res.status(201).json({ success: true, message: 'created', data: result });
 	} catch (error) {
 		console.log(error);
+		res.status(500).json({ success: false,message: 'Internal server error' });
 	}
 };
 
@@ -83,6 +85,7 @@ exports.updateTask = async (req, res) => {
 		res.status(200).json({ success: true, message: 'Updated', data: result });
 	} catch (error) {
 		console.log(error);
+		res.status(500).json({ success: false,message: 'Internal server error' });
 	}
 };
 
@@ -105,5 +108,6 @@ exports.deleteTask = async (req, res) => {
 		res.status(200).json({ success: true, message: 'deleted' });
 	} catch (error) {
 		console.log(error);
+		res.status(500).json({ success: false,message: 'Internal server error' });
 	}
 };
